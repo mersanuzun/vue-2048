@@ -121,15 +121,118 @@ describe('GameManager', () => {
   describe('addATile(board)', () => {
     let mathStub;
 
-    beforeEach(() => {
+    before(() => {
       mathStub = sandbox.stub(Math);
     });
 
-    it('should return newBoard with added new tile', () => {
-      
+    it('should return newBoard with added 2 point new tile if chance gets less than %85', () => {
+      const board = generateBoardTiles([[0, 2, 2, 2]]);
+      const newBoardWithATile = generateBoardTiles([[2, 2, 2, 2]]);
+
+      mathStub.random.returns(0.5);
+      mathStub.floor.withArgs(0.5).returns(0);
+      const newBoard = gameManager.addATile(board);
+
+      newBoard.should.deep.equal(newBoardWithATile);
     });
 
+    it('should return newBoard with added 4 point new tile if chance gets more than %85', () => {
+      const board = generateBoardTiles([[0, 2, 2, 2]]);
+      const newBoardWithATile = generateBoardTiles([[4, 2, 2, 2]]);
 
+      mathStub.random.returns(0.95);
+      mathStub.floor.withArgs(0.95).returns(0);
+      const newBoard = gameManager.addATile(board);
+
+      newBoard.should.deep.equal(newBoardWithATile);
+    });
+
+    it('should return false if there is no available cell', () => {
+      const board = generateBoardTiles([[2, 2, 2, 2]]);
+
+      mathStub.random.returns(0.95);
+      mathStub.floor.withArgs(0.95).returns(0);
+      const newBoard = gameManager.addATile(board);
+
+      newBoard.should.to.equal(false);
+    });
+  });
+
+  describe('slideToRightRow', () => {
+    it('should return a array with zeros are in left other numbers are in right of the array', () => {
+      const board = generateBoardTiles([[2, 0, 2, 0]]);
+      const newBoard = generateBoardTiles([[0, 0, 2, 2]]);
+
+      const newRow = gameManager.slideToRightRow(board[0]);
+
+      newRow.should.deep.equal(newBoard[0]);
+    });
+  });
+
+  describe('areSame', () => {
+    it('should true if given boards are same', () => {
+      const boardOne = generateBoardTiles([[2, 0, 2, 0], [2, 0, 2, 0]]);
+      const boardTwo = generateBoardTiles([[2, 0, 2, 0], [2, 0, 2, 0]]);
+
+      const areSame = gameManager.areSame(boardOne, boardTwo);
+
+      areSame.should.to.equal(true);
+    });
+
+    it('should false if given boards are not same', () => {
+      const boardOne = generateBoardTiles([[2, 0, 2, 0], [2, 0, 2, 0]]);
+      const boardTwo = generateBoardTiles([[4, 0, 2, 0], [2, 0, 2, 0]]);
+
+      const areSame = gameManager.areSame(boardOne, boardTwo);
+
+      areSame.should.to.equal(false);
+    });
+  });
+
+  describe('merge', () => {
+    it('should return merged new array, if array has same values side by side', () => {
+      const board = generateBoardTiles([[0, 0, 2, 2]]);
+      const mergedBoard = generateBoardTiles([[0, 0, 0, 4]]);
+
+      const newRow = gameManager.merge(board[0]);
+
+      newRow.should.deep.equal(mergedBoard[0]);
+      gameManager.totalScore.should.deep.equal(4);
+    });
+
+    it('should return not merged new array, if array has same values but not side by side', () => {
+      const board = generateBoardTiles([[0, 2, 0, 2]]);
+
+      const newRow = gameManager.merge(board[0]);
+
+      newRow.should.deep.equal(board[0]);
+    });
+
+    it('should return not merged new array, if array has not same values side by side', () => {
+      const board = generateBoardTiles([[0, 0, 4, 2]]);
+
+      const newRow = gameManager.merge(board[0]);
+
+      newRow.should.deep.equal(board[0]);
+    });
+
+    it('should update "maxMergedTilePoint" if mergedPoint is greater than it', () => {
+      const board = generateBoardTiles([[0, 0, 8, 8]]);
+
+      gameManager.merge(board[0]);
+
+      gameManager.maxMergedTilePoint.should.to.equal(16);
+    });
+
+    it('should multiply "maxMergedTilePoint" with 2 if "maxMergedTilePoint" is equal "targetPoint"', () => {
+      const board = generateBoardTiles([[0, 0, 8, 8]]);
+
+      gameManager.targetPoint = 16;
+
+      gameManager.merge(board[0]);
+
+      gameManager.targetPoint.should.to.equal(32);
+    });
   });
 
   describe('canMove(board)', () => {

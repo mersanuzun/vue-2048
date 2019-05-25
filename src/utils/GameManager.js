@@ -62,18 +62,16 @@ export default class GameManager {
       }, []);
     });
 
+    if (availableCells.length === 0) {
+      return false;
+    }
+    
     const randomIndex = Math.floor(Math.random() * availableCells.length);
     const newTilePosition = availableCells[randomIndex];
 
     newBoard[newTilePosition.row][newTilePosition.column].value = isTwoTile ? 2 : 4;
 
     return newBoard;
-  }
-
-  isBoardFull(board) {
-    return board.every((row) => {
-      return row.every(cell => cell.value !== 0);
-    });
   }
 
   slideToRightRow(row) {
