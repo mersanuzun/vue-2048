@@ -4,24 +4,27 @@
       @clickButton="clickButton"
       :score="gameManager.totalScore"
       :gameStatus="gameStatus"
-      :target="gameManager.targetPoint"
-      :best="gameManager.bestScore"
+      :target="target"
+      :bestScore="gameManager.bestScore"
     ></score-board>
     <board-shadow :board="board"></board-shadow>
-    <div>adasd</div>
+    <message v-if="message" :message="message"></message>
   </div>
 </template>
 
 <script>
 import ScoreBoard from "./ScoreBoard";
 import BoardShadow from "./BoardShadow";
+import Message from './Message';
 import GameManager from "../utils/GameManager.js";
 import GameEnum from "../utils/GameEnum";
+import { setTimeout, clearTimeout } from 'timers';
 
 export default {
   components: {
     ScoreBoard,
-    BoardShadow
+    BoardShadow,
+    Message
   },
 
   data() {
@@ -30,7 +33,8 @@ export default {
     return {
       board: gameManager.generateBoard(),
       gameStatus: GameEnum.NOT_STARTED,
-      gameManager
+      gameManager,
+      message: '',
     };
   },
 
@@ -79,8 +83,28 @@ export default {
     }
   },
 
+  computed: {
+    target() {
+      return this.gameManager.targetPoint;
+    }
+  },
+
   destroyed() {
     document.removeEventListener("keydown", this.handleKeyDown);
+    
+    clearTimeout(this.setTimeoutId);
+  },
+
+  watch: {
+    target() {
+      this.message = `Your new target ${this.target}`;
+
+      clearTimeout(this.setTimeoutId);
+
+      this.setTimeoutId = setTimeout(() => {
+        this.message = '';
+      }, 5000);
+    }
   }
 };
 </script>
@@ -93,6 +117,7 @@ export default {
   transform: translate(-50%, -50%);
   padding: 15px;
   width: 280px;
+  height: 425px;
   background-color: #f9f6ef;
 }
 </style>

@@ -1,13 +1,13 @@
 /* eslint-disable no-plusplus */
 import GameEnum from './GameEnum';
-import storage from './Storage';
+import Storage from './Storage';
 
 export default class GameManager {
   constructor() {
     this.maxMergedTilePoint = 0;
     this.totalScore = 0;
-    this.targetPoint = 2048;
-    this.bestScore = storage.get(GameEnum.STORAGE_KEY) || 0;
+    this.targetPoint = 8;
+    this.bestScore = Storage.get(GameEnum.STORAGE_KEY) || 0;
   }
 
   moveRight(board) {
@@ -51,7 +51,6 @@ export default class GameManager {
   }
 
   addATile(board) {
-    console.log(board)
     const newBoard = board.slice(0);
     const isTwoTile = Math.random() < 0.85;
     const availableCells = board.flatMap((row, rowIndex) => {
@@ -63,7 +62,6 @@ export default class GameManager {
       }, []);
     });
 
-    console.log(availableCells)
     const randomIndex = Math.floor(Math.random() * availableCells.length);
     const newTilePosition = availableCells[randomIndex];
 
@@ -166,5 +164,9 @@ export default class GameManager {
     }
 
     return false;
+  }
+
+  saveScore() {
+    Storage.set(GameEnum.STORAGE_KEY, this.totalScore);
   }
 }

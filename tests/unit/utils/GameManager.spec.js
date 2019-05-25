@@ -132,7 +132,6 @@ describe('GameManager', () => {
 
   });
 
-
   describe('canMove(board)', () => {
     it('should return true if board has any empty tile in board center', () => {
       const board = [
