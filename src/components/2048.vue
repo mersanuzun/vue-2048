@@ -78,6 +78,8 @@ export default {
 
         if (!this.gameManager.canMove(this.board)) {
           this.gameManager.saveScore();
+
+          this.message = 'GAMEOVER!!!';
         }
       }
     }
