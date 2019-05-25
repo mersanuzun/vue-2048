@@ -28,6 +28,10 @@ describe('GameManager', () => {
     gameManager = new GameManager();
   });
 
+  afterEach(() => {
+    sandbox.reset();
+  });
+
   describe('moveRight(board)', () => {
     it('should call moveBoard methods', () => {
       const moveBoardStub = sandbox.stub(gameManager, 'moveBoard');
@@ -123,6 +127,10 @@ describe('GameManager', () => {
 
     before(() => {
       mathStub = sandbox.stub(Math);
+    });
+
+    afterEach(() => {
+      
     });
 
     it('should return newBoard with added 2 point new tile if chance gets less than %85', () => {

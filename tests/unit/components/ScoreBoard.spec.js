@@ -8,7 +8,7 @@ import ScoreBoard from '@/components/ScoreBoard.vue';
 import Score from '@/components/Score.vue';
 import GameEnum from '@/utils/GameEnum';
 
-describe('Score.vue', () => {
+describe('ScoreBoard.vue', () => {
   before(() => {
     should();
   });
