@@ -1,5 +1,5 @@
 <template>
-  <div class="tile" :style="backgroundStyle">{{ value }}</div>
+  <div class="tile" :style="backgroundStyle">{{ getValue }}</div>
 </template>
 
 <script>
@@ -15,9 +15,13 @@ export default {
 
   computed: {
     backgroundStyle() {
-      const color = [2, 4].indexOf(this.value) > -1 ? '#444444' : 'white';
-      
-      return `background-color: ${tileColors[this.value]}; color: ${color};`;
+      const color = [2, 4].indexOf(this.value) > -1 ? "#444444" : "white";
+
+      return { "background-color": tileColors[this.value], color };
+    },
+
+    getValue() {
+      return this.value ? this.value : "";
     }
   }
 };

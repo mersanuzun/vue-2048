@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import GameEnum from './GameEnum';
 import storage from './Storage';
 
@@ -10,13 +11,13 @@ export default class GameManager {
   }
 
   moveRight(board) {
-    return this._move(board);
+    return this.moveBoard(board);
   }
 
   moveUp(board) {
     let newBoard = this.rotateToRight(board);
 
-    newBoard = this._move(newBoard);
+    newBoard = this.moveBoard(newBoard);
 
     return this.rotateToRight(newBoard, 3);
   }
@@ -24,7 +25,7 @@ export default class GameManager {
   moveLeft(board) {
     let newBoard = this.rotateToRight(board, 2);
 
-    newBoard = this._move(newBoard);
+    newBoard = this.moveBoard(newBoard);
 
     return this.rotateToRight(newBoard, 2);
   }
@@ -32,13 +33,13 @@ export default class GameManager {
   moveDown(board) {
     let newBoard = this.rotateToRight(board, 3);
 
-    newBoard = this._move(newBoard);
+    newBoard = this.moveBoard(newBoard);
 
     return this.rotateToRight(newBoard, 1);
   }
 
-  _move(board) {
-    const newBoard = board.map(row => {
+  moveBoard(board) {
+    const newBoard = board.map((row) => {
       let newRow = this.slideToRightRow(row);
 
       newRow = this.merge(newRow);
@@ -46,34 +47,34 @@ export default class GameManager {
       return this.slideToRightRow(newRow);
     });
 
-    if (this.maxMergedTilePoint === this.targetPoint) {
-      this.targetPoint *= 2;
-    }
-
     return newBoard;
   }
 
   addATile(board) {
+    console.log(board)
     const newBoard = board.slice(0);
+    const isTwoTile = Math.random() < 0.85;
     const availableCells = board.flatMap((row, rowIndex) => {
       return row.reduce((result, nextRow, columnIndex) => {
         return nextRow.value === 0 ? result.concat({
-          r: rowIndex,
-          c: columnIndex
+          row: rowIndex,
+          column: columnIndex,
         }) : result;
       }, []);
     });
+
+    console.log(availableCells)
     const randomIndex = Math.floor(Math.random() * availableCells.length);
     const newTilePosition = availableCells[randomIndex];
 
-    newBoard[newTilePosition.r][newTilePosition.c].value = 2;
+    newBoard[newTilePosition.row][newTilePosition.column].value = isTwoTile ? 2 : 4;
 
     return newBoard;
   }
 
   isBoardFull(board) {
     return board.every((row) => {
-      return row.every((cell) => cell.value !== 0);
+      return row.every(cell => cell.value !== 0);
     });
   }
 
@@ -87,13 +88,14 @@ export default class GameManager {
     return newBoard.every((newBoardRow, rowIndex) => {
       return newBoardRow.every((cell, columnIndex) => {
         return cell.value === board[rowIndex][columnIndex].value;
-      })
-    })
+      });
+    });
   }
 
   merge(row) {
     const newRow = row.slice(0);
 
+    // eslint-disable-next-line no-plusplus
     for (let i = newRow.length - 1; i > 0; i--) {
       const currentCell = newRow[i];
       const nextCell = newRow[i - 1];
@@ -107,6 +109,10 @@ export default class GameManager {
           this.maxMergedTilePoint = mergedPoint;
         }
 
+        if (this.maxMergedTilePoint === this.targetPoint) {
+          this.targetPoint *= 2;
+        }
+
         currentCell.value = mergedPoint;
         nextCell.value = 0;
       }
@@ -116,16 +122,14 @@ export default class GameManager {
   }
 
   generateBoard() {
-    return [...Array(4).keys()].map(_ =>
-      [...Array(4).keys()].map(_ => ({
-        value: 0
-      }))
-    );
+    return [...Array(4).keys()].map(_ => [...Array(4).keys()].map(_ => ({
+      value: 0
+    })));
   }
 
   rotateToRight(board, numberOfTimes) {
-    const rotateToRightRecursively = (board, numberOfTimes) => {
-      if (typeof numberOfTimes === 'undefined' || numberOfTimes === 0) {
+    const rotateToRightRecursively = (board, numOfTimes) => {
+      if (typeof numOfTimes === 'undefined' || numOfTimes === 0) {
         return board;
       }
 
@@ -137,7 +141,7 @@ export default class GameManager {
         }
       }
 
-      return rotateToRightRecursively(newBoard, numberOfTimes - 1);
+      return rotateToRightRecursively(newBoard, numOfTimes - 1);
     };
 
     return rotateToRightRecursively(board, numberOfTimes || 1);
@@ -145,14 +149,17 @@ export default class GameManager {
 
   copyBoard(board) {
     return board.map((row) => {
-      return row.map((cell) => ({ value: cell.value }));
-    })
+      return row.map(cell => Object.assign({}, cell));
+    });
   }
 
   canMove(board) {
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
-        if (board[i][j].value === 0 || (j < board[i].length) || board[i][j] === board[i][j + 1] || (i < board.length - 1 && board[i][j] === board[i + 1][j])) {
+        if (board[i][j].value === 0 || (j < board[j].length - 1 && board[i][j].value === board[i][
+            j + 1
+          ].value) ||
+          (i < board[i].length - 1 && board[i][j].value === board[i + 1][j].value)) {
           return true;
         }
       }
@@ -160,4 +167,4 @@ export default class GameManager {
 
     return false;
   }
-};
+}
