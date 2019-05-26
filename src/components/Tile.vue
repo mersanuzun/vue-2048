@@ -30,8 +30,8 @@ export default {
 
 <style lang="scss" scoped>
 .tile {
-  width: 60px;
-  height: 60px;
+  width: 75px;
+  height: 75px;
   margin: 5px;
   display: flex;
   justify-content: center;

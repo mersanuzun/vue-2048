@@ -30,7 +30,7 @@ export default {
   color: white;
 
   div {
-    width: 72px;
+    width: 90px;
   }
 
   .score-title {

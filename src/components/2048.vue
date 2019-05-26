@@ -119,7 +119,7 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 15px;
-  width: 280px;
+  width: 340px;
   height: 425px;
   background-color: #f9f6ef;
 }
