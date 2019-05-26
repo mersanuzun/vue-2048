@@ -10,22 +10,22 @@ describe('GameManager', () => {
   let sandbox;
   let storageStub;
 
-  const generateBoardTiles = (board) => {
-    return board.map(row => row.map(value => ({
-      value,
-    })));
-  };
+  const generateBoardTiles = board => board.map(row => row.map(value => ({
+    value,
+  })));
 
   before(() => {
     sandbox = sinon.createSandbox();
 
-    storageStub = sandbox.stub(Storage);
+    storageStub = sandbox.stub(Storage.prototype);
+
+    storageStub.get.returns(0);
 
     should();
   });
 
   beforeEach(() => {
-    gameManager = new GameManager();
+    gameManager = new GameManager(new Storage());
   });
 
   afterEach(() => {
@@ -106,11 +106,12 @@ describe('GameManager', () => {
   describe('moveBoad(board)', () => {
     it('should call slideToRightRow(row), merge(newRow) and slideToRight(newRow)', () => {
       const board = [
-        [1, 0, 2, 3]
+        [1, 0, 2, 3],
       ];
       const newRow = [0, 1, 2, 3];
       const slideToRightRowStub = sandbox.stub(gameManager, 'slideToRightRow').returns(
-        newRow);
+        newRow,
+      );
       const mergeBoardStub = sandbox.stub(gameManager, 'merge').returns(newRow);
 
       gameManager.moveBoard(board);
@@ -130,7 +131,7 @@ describe('GameManager', () => {
     });
 
     afterEach(() => {
-      
+
     });
 
     it('should return newBoard with added 2 point new tile if chance gets less than %85', () => {

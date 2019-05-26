@@ -19,53 +19,53 @@
 
 
 <script>
-import Score from "./Score";
-import GameEnum from '../utils/GameEnum';
+import Score from './Score.vue';
+import GameEnum from '../utils/GameEnum.js';
 
 export default {
   props: {
     target: {
       type: Number,
-      default: 2048
+      default: 2048,
     },
 
     score: {
       type: Number,
-      default: 0
+      default: 0,
     },
 
     bestScore: {
       type: Number,
-      default: 0
+      default: 0,
     },
 
     gameStatus: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
 
   computed: {
-    buttonText () {
+    buttonText() {
       if (this.gameStatus === GameEnum.NOT_STARTED) {
         return 'Start';
-      } else if (this.gameStatus === GameEnum.PLAYING) {
+      } if (this.gameStatus === GameEnum.PLAYING) {
         return 'Restart';
       }
 
       return '';
-    }
+    },
   },
 
   components: {
-    Score
+    Score,
   },
 
   methods: {
     handleClick() {
       this.$emit('clickButton');
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -121,4 +121,3 @@ export default {
   }
 }
 </style>
-

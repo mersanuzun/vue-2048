@@ -15,7 +15,7 @@ export default {
 };
 </script>
 
-<style <style lang="scss">
+<style lang="scss">
 div {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   text-align: center;

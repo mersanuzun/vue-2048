@@ -3,27 +3,27 @@
 </template>
 
 <script>
-import { tileColors } from "../utils/constants";
+import { tileColors } from '../utils/constants';
 
 export default {
   props: {
     value: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
 
   computed: {
     backgroundStyle() {
-      const color = [2, 4].indexOf(this.value) > -1 ? "#444444" : "white";
+      const color = [2, 4].indexOf(this.value) > -1 ? '#444444' : 'white';
 
-      return { "background-color": tileColors[this.value], color };
+      return { 'background-color': tileColors[this.value], color };
     },
 
     getValue() {
-      return this.value ? this.value : "";
-    }
-  }
+      return this.value ? this.value : '';
+    },
+  },
 };
 </script>
 

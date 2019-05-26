@@ -13,22 +13,23 @@
 </template>
 
 <script>
-import ScoreBoard from "./ScoreBoard";
-import BoardShadow from "./BoardShadow";
-import Message from './Message';
-import GameManager from "../utils/GameManager.js";
-import GameEnum from "../utils/GameEnum";
+import ScoreBoard from './ScoreBoard.vue';
+import BoardShadow from './BoardShadow.vue';
+import Message from './Message.vue';
+import GameManager from '../utils/GameManager';
+import GameEnum from '../utils/GameEnum';
 import { setTimeout, clearTimeout } from 'timers';
+import Storage from '@/utils/Storage';
 
 export default {
   components: {
     ScoreBoard,
     BoardShadow,
-    Message
+    Message,
   },
 
   data() {
-    const gameManager = new GameManager();
+    const gameManager = new GameManager(new Storage());
 
     return {
       board: gameManager.generateBoard(),
@@ -41,7 +42,7 @@ export default {
   methods: {
     clickButton() {
       if (this.gameStatus === GameEnum.NOT_STARTED) {
-        document.addEventListener("keydown", this.handleKeyDown);
+        document.addEventListener('keydown', this.handleKeyDown);
 
         this.board = this.gameManager.addATile(this.board);
         this.board = this.gameManager.addATile(this.board);
@@ -59,7 +60,7 @@ export default {
     },
 
     handleKeyDown(event) {
-      const direction = event.code.replace("Arrow", "").toLowerCase();
+      const direction = event.code.replace('Arrow', '').toLowerCase();
       const oldBoard = this.gameManager.copyBoard(this.board);
       let newBoard;
 
@@ -79,21 +80,21 @@ export default {
         if (!this.gameManager.canMove(this.board)) {
           this.gameManager.saveScore();
 
-          this.message = 'GAMEOVER!!!';
+          this.message = `GAME OVER. Your score: ${this.gameManager.totalScore}`;
         }
       }
-    }
+    },
   },
 
   computed: {
     target() {
       return this.gameManager.targetPoint;
-    }
+    },
   },
 
   destroyed() {
-    document.removeEventListener("keydown", this.handleKeyDown);
-    
+    document.removeEventListener('keydown', this.handleKeyDown);
+
     clearTimeout(this.setTimeoutId);
   },
 
@@ -106,8 +107,8 @@ export default {
       this.setTimeoutId = setTimeout(() => {
         this.message = '';
       }, 5000);
-    }
-  }
+    },
+  },
 };
 </script>
 

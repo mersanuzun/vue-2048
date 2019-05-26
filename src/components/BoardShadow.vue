@@ -11,18 +11,18 @@
 </template>
 
 <script>
-import Tile from "./Tile";
+import Tile from './Tile';
 
 export default {
   components: {
-    Tile
+    Tile,
   },
 
   props: {
     board: {
-      type: Array
-    }
-  }
+      type: Array,
+    },
+  },
 };
 </script>
 

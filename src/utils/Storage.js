@@ -1,5 +1,5 @@
 export default class Storage {
-  static set(key, value) {
+  set(key, value) {
     const valueAsJson = {
       value,
     };
@@ -7,7 +7,7 @@ export default class Storage {
     localStorage.setItem(key, JSON.stringify(valueAsJson));
   }
 
-  static get(key) {
+  get(key) {
     const value = localStorage.getItem(key) || '{}';
 
     return JSON.parse(value).value;

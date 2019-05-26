@@ -10,13 +10,13 @@ export default {
   props: {
     title: {
       type: String,
-      default: ""
+      default: '',
     },
     score: {
       type: Number,
-      default: 0
-    }
-  }
+      default: 0,
+    },
+  },
 };
 </script>
 
@@ -42,4 +42,3 @@ export default {
   }
 }
 </style>
-
