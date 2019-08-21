@@ -5,7 +5,7 @@ cache:
   directories:
   - node_modules
 script:
-- npm run test:unit
+  - npm run test:unit
 deploy:
   provider: heroku
   app: tranquil-mountain-27886
